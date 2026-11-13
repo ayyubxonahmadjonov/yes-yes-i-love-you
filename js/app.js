@@ -236,6 +236,7 @@
   }
   gate.addEventListener('click', () => open(false));
 
+  const finale = $('#finale');
   /* ── ko'rinishda paydo bo'lish ── */
   const io = new IntersectionObserver(es => {
     es.forEach(e => {
@@ -243,6 +244,7 @@
       if (e.target.classList.contains('hero')) return;
       e.target.classList.add('in');
       io.unobserve(e.target);
+      if (e.target === finale) { finale.classList.add('said'); celebrate(); }
       const r = e.target.getBoundingClientRect();
       burst(W / 2, Math.max(80, Math.min(H - 80, r.top + r.height * .35)), 8, .8);
     });
@@ -276,20 +278,14 @@
   }
 
   /* ── final ── */
-  const finale = $('#finale');
   function celebrate() {
     party = true;
-    const shots = reduce ? 3 : 14;
+    const shots = reduce ? 3 : 8;
     for (let i = 0; i < shots; i++) {
       setTimeout(() => burst(rand(W * .1, W * .9), rand(H * .15, H * .7), 26, 1.4), i * 260);
     }
-    setTimeout(() => { party = false; }, 14000);
+    setTimeout(() => { party = false; }, 8000);
   }
-  $$('.yes').forEach(b => b.addEventListener('click', () => {
-    finale.classList.add('said');
-    if (!actx) initAudio();
-    celebrate();
-  }));
   $('.again').addEventListener('click', celebrate);
 
   /* ── tekshiruv uchun: #open yoki #open&s=2 ── */
