@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1a0509">
+<title>Sen uchun ♥</title>
+<meta name="description" content="Faqat sen uchun — kichkina albom.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23ff4d6d' d='M16 29C6 21 2 16 2 10.5 2 6 5.5 3 9.5 3c2.700 0 5 1.500 6.500 4C17.500 4.500 19.800 3 22.500 3 26.500 3 30 6 30 10.500 30 16 26 21 16 29z'/%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/Fraunces-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <clipPath id="heartClip" clipPathUnits="objectBoundingBox">
+      <path d="M0.5,0.96 C0.2,0.73 0,0.53 0,0.3 C0,0.13 0.13,0.02 0.28,0.02 C0.38,0.02 0.46,0.08 0.5,0.17 C0.54,0.08 0.62,0.02 0.72,0.02 C0.87,0.02 1,0.13 1,0.3 C1,0.53 0.8,0.73 0.5,0.96 Z"/>
+    </clipPath>
+  </defs>
+</svg>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<button class="music" id="music" aria-label="Musiqa" hidden>
+  <span class="eq"><i></i><i></i><i></i></span>
+</button>
+
+<!-- ───────── Kirish ───────── -->
+<div class="gate" id="gate">
+  <p class="gate-top">senga</p>
+  <button class="gate-heart" id="open" aria-label="Albomni ochish">
+    <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 29C6 21 2 16 2 10.500 2 6 5.500 3 9.500 3c2.700 0 5 1.500 6.500 4C17.500 4.500 19.800 3 22.500 3 26.500 3 30 6 30 10.500 30 16 26 21 16 29z"/></svg>
+    <b>och</b>
+  </button>
+  <p class="gate-title">kichkina bir albom</p>
+  <p class="gate-hint">yurakka bos · ovozni yoqib qo‘y</p>
+</div>
+
+<main id="main">
+
+  <!-- ───────── Hero ───────── -->
+  <section class="hero sec">
+    <p class="eyebrow rv">faqat sen uchun</p>
+    <div class="hero-heart rv">
+      <div class="hh-glow"></div>
+      <div class="hh-clip"><img src="assets/img/2.jpg" alt="" width="900" height="900"></div>
+    </div>
+    <h1 class="hero-title">
+      <span class="l1" data-split>Yes, yes,</span>
+      <span class="l2 rv">I love you</span>
+    </h1>
+    <p class="hero-sub rv">Besh surat, bitta yurak — hammasi sen haqingda.</p>
+    <div class="scroll-hint rv" aria-hidden="true"><span></span>pastga</div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div>
+    <span>yes, yes, I love you</span><b>♥</b><span>yes, yes, I love you</span><b>♥</b><span>yes, yes, I love you</span><b>♥</b><span>yes, yes, I love you</span><b>♥</b>
+    <span>yes, yes, I love you</span><b>♥</b><span>yes, yes, I love you</span><b>♥</b><span>yes, yes, I love you</span><b>♥</b><span>yes, yes, I love you</span><b>♥</b>
+  </div></div>
+
+  <!-- ───────── 01 ───────── -->
+  <section class="page sec p-polaroid">
+    <div class="shot">
+      <figure class="polaroid tilt">
+        <i class="tape"></i>
+        <div class="ph sq"><img src="assets/img/1.jpg" alt="" loading="lazy" width="900" height="900"></div>
+        <figcaption>muah ♥</figcaption>
+      </figure>
+      <span class="kiss k1">💋</span><span class="kiss k2">💋</span><span class="kiss k3">💋</span>
+    </div>
+    <div class="txt">
+      <p class="num rv">01 <i>/ 04</i></p>
+      <h2 data-split>Erkatoyim</h2>
+      <p class="body rv">Shu birgina qilig‘ing uchun butun dunyoni bersam arziydi. Senga qarab turib jilmaymaslikning iloji yo‘q.</p>
+    </div>
+  </section>
+
+  <!-- ───────── 02 ───────── -->
+  <section class="page sec p-film flip">
+    <div class="shot">
+      <figure class="film tilt">
+        <div class="ph"><img src="assets/img/3.jpg" alt="" loading="lazy" width="720" height="1280"></div>
+        <figcaption>kadr 02 · sen</figcaption>
+      </figure>
+    </div>
+    <div class="txt">
+      <p class="num rv">02 <i>/ 04</i></p>
+      <h2 data-split>Oq-qora kadr</h2>
+      <p class="body rv">Surat oq-qora, lekin sen hayotimga kirgan kundan beri dunyom rang-barang.</p>
+    </div>
+  </section>
+
+  <div class="marquee rev" aria-hidden="true"><div>
+    <span>seni sevaman</span><b>♥</b><span>yes, yes</span><b>♥</b><span>seni sevaman</span><b>♥</b><span>yes, yes</span><b>♥</b><span>seni sevaman</span><b>♥</b><span>yes, yes</span><b>♥</b>
+    <span>seni sevaman</span><b>♥</b><span>yes, yes</span><b>♥</b><span>seni sevaman</span><b>♥</b><span>yes, yes</span><b>♥</b><span>seni sevaman</span><b>♥</b><span>yes, yes</span><b>♥</b>
+  </div></div>
+
+  <!-- ───────── 03 ───────── -->
+  <section class="page sec p-arch">
+    <div class="shot">
+      <figure class="arch tilt">
+        <div class="ph"><img src="assets/img/4.jpg" alt="" loading="lazy" width="900" height="1255"></div>
+      </figure>
+      <span class="spark s1">✦</span><span class="spark s2">✦</span><span class="spark s3">✦</span>
+    </div>
+    <div class="txt">
+      <p class="num rv">03 <i>/ 04</i></p>
+      <h2 data-split>Tabassuming</h2>
+      <p class="body rv">Dunyodagi eng sevimli manzaram — sening tabassuming. Uni har kuni ko‘rish — mening eng katta baxtim.</p>
+    </div>
+  </section>
+
+  <!-- ───────── 04 ───────── -->
+  <section class="page sec p-bloom flip">
+    <div class="petals" aria-hidden="true"></div>
+    <div class="shot">
+      <figure class="bloom tilt">
+        <div class="ph"><img src="assets/img/5.jpg" alt="" loading="lazy" width="960" height="1280"></div>
+      </figure>
+    </div>
+    <div class="txt">
+      <p class="num rv">04 <i>/ 04</i></p>
+      <h2 data-split>Gullar orasida</h2>
+      <p class="body rv">Atrofing to‘la gul, ammo ko‘zim faqat senda. Chunki ularning eng go‘zali — sen.</p>
+    </div>
+  </section>
+
+  <!-- ───────── Maktub ───────── -->
+  <section class="letter sec">
+    <article class="paper">
+      <i class="seal" aria-hidden="true">♥</i>
+      <h3 class="rv">Jonim,</h3>
+      <p class="rv">Ba’zan ichimdagini aytishga so‘z topolmayman. Shuning uchun mana shu kichkina albomni yasadim.</p>
+      <p class="rv">Har bir surating — men uchun bir bayram. Sen kulganingda atrof jim bo‘lib qoladi, men esa senga yana bir bor oshiq bo‘laman.</p>
+      <p class="rv">Yonimda borliging uchun rahmat. Seni asrayman, ardoqlayman, sevaman.</p>
+      <p class="sign rv">— seniki, butunlay</p>
+    </article>
+  </section>
+
+  <!-- ───────── Final ───────── -->
+  <section class="finale sec" id="finale">
+    <div class="ask">
+      <p class="eyebrow rv">bitta savolim bor…</p>
+      <h2 data-split>Meni sevasanmi?</h2>
+      <div class="btns rv">
+        <button class="yes" type="button">Yes</button>
+        <button class="yes alt" type="button">Yes!</button>
+      </div>
+      <p class="tiny rv">boshqa javob yo‘q 😌</p>
+    </div>
+    <div class="answer" aria-live="polite">
+      <div class="thumbs">
+        <img src="assets/img/1.jpg" alt=""><img src="assets/img/3.jpg" alt=""><img src="assets/img/2.jpg" alt=""><img src="assets/img/4.jpg" alt=""><img src="assets/img/5.jpg" alt="">
+      </div>
+      <h2 class="ily"><span>I</span> <span>love</span> <span>you</span></h2>
+      <p class="body">Men ham seni sevaman.<br>Bugun, ertaga, har doim.</p>
+      <button class="again" type="button">yana bir bor ♥</button>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>
