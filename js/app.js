@@ -95,7 +95,7 @@
   const musicBtn = $('#music');
 
   function initAudio() {
-    if (actx) return;
+    if (actx || audio) return;
     const AC = window.AudioContext || window.webkitAudioContext;
     try {
       actx = new AC();
@@ -120,7 +120,7 @@
     musicBtn.hidden = false;
   }
 
-  /* Qo'shiq fayli bo'lmasa — mayin "music box" ohangi */
+  /* Qo'shiq fayli ochilmasa — mayin "music box" ohangi */
   function startSynth() {
     if (synthOn || usingFile || !actx) return;
     synthOn = true;
@@ -163,11 +163,86 @@
   }
   musicBtn.addEventListener('click', e => { e.stopPropagation(); setPlaying(!playing); });
   document.addEventListener('visibilitychange', () => {
-    if (!actx) return;
-    if (document.hidden) { usingFile && audio.pause(); actx.suspend(); }
-    else if (playing) { actx.resume(); usingFile && audio.play().catch(() => {}); }
+    if (!audio) return;
+    if (document.hidden) { usingFile && audio.pause(); actx && actx.suspend(); }
+    else if (playing) { actx && actx.resume(); usingFile && audio.play().catch(() => {}); }
   });
 
+  /* ── sahnalar: o'zi o'ynaydigan "story" ── */
+  const scenes = $$('.scene');
+  const finale = $('#finale');
+  const barsEl = $('#bars');
+  const fills = scenes.map(() => {
+    const i = document.createElement('i'), b = document.createElement('b');
+    i.appendChild(b); barsEl.appendChild(i);
+    return b;
+  });
+  const layers = $$('.backdrop i');
+  const flashEl = $('.flash');
+  let cur = -1, sceneStart = 0, due = false, frozen = false, layerI = 0, opened = false, party = false;
+
+  function setBackdrop(n) {
+    const prev = layers[layerI];
+    layerI ^= 1;
+    const nx = layers[layerI];
+    if (n) { nx.style.backgroundImage = 'url(assets/img/' + n + '.jpg)'; nx.classList.add('on'); }
+    else nx.classList.remove('on');
+    prev.classList.remove('on');
+  }
+  function flash() {
+    if (reduce) return;
+    flashEl.classList.remove('go');
+    void flashEl.offsetWidth;
+    flashEl.classList.add('go');
+  }
+  function go(i) {
+    i = (i + scenes.length) % scenes.length;
+    if (i === cur) return;
+    const prev = scenes[cur];
+    if (prev) {
+      prev.classList.remove('in');
+      prev.classList.add('out');
+      setTimeout(() => prev.classList.remove('out'), 700);
+    }
+    cur = i; due = false; party = false;
+    root.dataset.scene = i;
+    const s = scenes[i];
+    s.classList.remove('out');
+    void s.offsetWidth;
+    s.classList.add('in');
+    sceneStart = performance.now();
+    setBackdrop(s.dataset.bg);
+    fills.forEach((f, k) => { f.style.transform = 'scaleX(' + (k < i ? 1 : 0) + ')'; });
+    if (prev) { flash(); burst(W / 2, H * .42, 26, 1.5); }
+    if (s === finale) celebrate();
+  }
+  function next() { go(cur + 1); }
+  function tick(t) {
+    if (cur < 0 || frozen) return;
+    const dur = +scenes[cur].dataset.dur;
+    const p = (t - sceneStart) / dur;
+    fills[cur].style.transform = 'scaleX(' + Math.min(1, Math.max(0, p)) + ')';
+    if (p >= 1) due = true;                      // keyingi zarbda almashadi
+    if (t - sceneStart > dur + 900) next();      // zarb kelmasa ham kutib qolmaydi
+  }
+  let hiddenAt = 0;
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) hiddenAt = performance.now();
+    else if (hiddenAt) { sceneStart += performance.now() - hiddenAt; hiddenAt = 0; }
+  });
+
+  function celebrate() {
+    party = true;
+    const shots = reduce ? 3 : 9;
+    for (let i = 0; i < shots; i++) {
+      setTimeout(() => {
+        if (scenes[cur] === finale) burst(rand(W * .1, W * .9), rand(H * .12, H * .7), 26, 1.4);
+      }, 300 + i * 280);
+    }
+  }
+  $('.again').addEventListener('click', e => { e.stopPropagation(); go(0); });
+
+  /* ── ritm ── */
   let beat = 0, avg = 0, lastOn = 0, quiet = 0, beatN = 0;
   function readBeat(t) {
     let e = 0;
@@ -187,21 +262,23 @@
       avg += (e - avg) * .04;
       on = e > avg * 1.18 && e > .16 && t - lastOn > 300;
     }
-    if (on) { lastOn = t; beat = playing || quiet > 40 ? 1 : 0; onBeat(); }
+    if (on) { lastOn = t; beat = 1; onBeat(); }
     beat *= .9;
     root.style.setProperty('--beat', beat.toFixed(3));
   }
   function onBeat() {
     beatN++;
-    if (!document.body.classList.contains('opened') || reduce) return;
+    if (!opened) return;
+    if (due && !frozen) { next(); return; }
+    if (reduce) return;
     if (ambient.length < 46) ambient.push(newAmbient(false));
     if (party && beatN % 2 === 0) burst(rand(W * .15, W * .85), rand(H * .2, H * .6), 16, 1.1);
   }
 
   /* ── kadr ── */
-  let party = false;
   function frame(t) {
     readBeat(t);
+    tick(t);
     c.clearRect(0, 0, W, H);
     for (let i = ambient.length - 1; i >= 0; i--) {
       const p = ambient[i];
@@ -223,7 +300,6 @@
 
   /* ── ochilish ── */
   const gate = $('#gate');
-  let opened = false;
   function open(silent) {
     if (opened) return;
     opened = true;
@@ -232,37 +308,25 @@
     burst(W / 2, H * .46, 46, 1.5);
     setTimeout(() => burst(W / 2, H * .46, 30, 2), 350);
     setTimeout(() => { gate.remove(); }, 1700);
-    setTimeout(() => $('.hero').classList.add('in'), silent ? 0 : 700);
+    setTimeout(() => { if (cur < 0) go(0); }, silent ? 0 : 750);
   }
   gate.addEventListener('click', () => open(false));
 
-  const finale = $('#finale');
-  /* ── ko'rinishda paydo bo'lish ── */
-  const io = new IntersectionObserver(es => {
-    es.forEach(e => {
-      if (!e.isIntersecting || !opened) return;
-      if (e.target.classList.contains('hero')) return;
-      e.target.classList.add('in');
-      io.unobserve(e.target);
-      if (e.target === finale) { finale.classList.add('said'); celebrate(); }
-      const r = e.target.getBoundingClientRect();
-      burst(W / 2, Math.max(80, Math.min(H - 80, r.top + r.height * .35)), 8, .8);
-    });
-  }, { threshold: .28 });
-  $$('.sec').forEach(s => io.observe(s));
-
-  /* ── progress ── */
-  const bar = $('.progress i');
-  addEventListener('scroll', () => {
-    const max = document.documentElement.scrollHeight - innerHeight;
-    bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
-  }, { passive: true });
-
-  /* ── bosganda yuraklar ── */
+  /* ── bosish: yuraklar + oldinga / orqaga ── */
   addEventListener('pointerdown', e => {
-    if (!opened || e.target.closest('button')) return;
+    if (cur < 0 || e.target.closest('button')) return;
     burst(e.clientX, e.clientY, 9, .8);
   }, { passive: true });
+  $('#stage').addEventListener('click', e => {
+    if (cur < 0 || e.target.closest('button')) return;
+    if (e.clientX < W * .28) { if (cur > 0) go(cur - 1); }
+    else if (scenes[cur] !== finale) next();
+  });
+  addEventListener('keydown', e => {
+    if (cur < 0) return;
+    if (e.key === 'ArrowRight' || e.key === ' ') next();
+    if (e.key === 'ArrowLeft' && cur > 0) go(cur - 1);
+  });
 
   /* ── 3D og'ish (sichqoncha) ── */
   if (matchMedia('(hover:hover) and (pointer:fine)').matches && !reduce) {
@@ -271,33 +335,19 @@
       host.addEventListener('pointermove', e => {
         const r = host.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
-        el.style.transform = `rotateY(${x * 14}deg) rotateX(${-y * 12}deg) scale(1.03)`;
+        el.style.transition = 'transform .2s';
+        el.style.transform = 'rotateY(' + x * 14 + 'deg) rotateX(' + -y * 12 + 'deg) scale(1.03)';
       });
-      host.addEventListener('pointerleave', () => { el.style.transform = ''; });
+      host.addEventListener('pointerleave', () => { el.style.transform = ''; el.style.transition = ''; });
     });
   }
 
-  /* ── final ── */
-  function celebrate() {
-    party = true;
-    const shots = reduce ? 3 : 8;
-    for (let i = 0; i < shots; i++) {
-      setTimeout(() => burst(rand(W * .1, W * .9), rand(H * .15, H * .7), 26, 1.4), i * 260);
-    }
-    setTimeout(() => { party = false; }, 8000);
-  }
-  $('.again').addEventListener('click', celebrate);
-
-  /* ── tekshiruv uchun: #open yoki #open&s=2 ── */
+  /* ── tekshiruv uchun: #open&still&s=2 ── */
   if (location.hash.includes('open')) {
     if (location.hash.includes('still')) document.body.classList.add('still');
     open(true);
     gate.remove();
     const m = location.hash.match(/s=(\d+)/);
-    if (m) {
-      const sec = $$('.sec')[+m[1]];
-      if (sec) { sec.scrollIntoView(); sec.classList.add('in'); }
-      if (location.hash.includes('said')) finale.classList.add('said');
-    }
+    if (m) { frozen = true; go(+m[1]); }
   }
 })();

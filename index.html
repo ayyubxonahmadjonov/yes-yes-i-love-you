@@ -2,7 +2,7 @@
 <html lang="uz">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#1a0509">
 <title>Sen uchun ♥</title>
@@ -21,8 +21,13 @@
   </defs>
 </svg>
 
+<div class="backdrop" aria-hidden="true"><i></i><i></i></div>
+<div class="bgtext" aria-hidden="true"><div>
+  <span>yes, yes, I love you ♥</span><span>yes, yes, I love you ♥</span><span>yes, yes, I love you ♥</span><span>yes, yes, I love you ♥</span>
+</div></div>
 <canvas id="fx" aria-hidden="true"></canvas>
-<div class="progress" aria-hidden="true"><i></i></div>
+<div class="flash" aria-hidden="true"></div>
+<div class="bars" id="bars" aria-hidden="true"></div>
 
 <button class="music" id="music" aria-label="Musiqa" hidden>
   <span class="eq"><i></i><i></i><i></i></span>
@@ -40,12 +45,16 @@
   <p class="gate-hint">yurakka bos · ovozni yoqib qo‘y</p>
 </div>
 
-<main id="main">
+<main id="stage">
 
   <!-- ───────── Hero ───────── -->
-  <section class="hero sec">
+  <section class="scene hero" data-dur="5600" data-bg="2">
     <p class="eyebrow rv">sen uchun</p>
     <div class="hero-heart rv">
+      <svg class="orbit" viewBox="0 0 200 200" aria-hidden="true">
+        <defs><path id="circ" d="M100,100 m-90,0 a90,90 0 1,1 180,0 a90,90 0 1,1 -180,0"/></defs>
+        <text><textPath href="#circ" textLength="560">yes, yes, I love you ♥ yes, yes, I love you ♥ yes, yes, I love you ♥</textPath></text>
+      </svg>
       <div class="hh-glow"></div>
       <div class="hh-clip"><img src="assets/img/2.jpg" alt="" width="900" height="900"></div>
     </div>
@@ -54,20 +63,14 @@
       <span class="l2 rv">I love you</span>
     </h1>
     <p class="hero-sub rv">Besh surat, bitta kichkina albom — sen haqingda.</p>
-    <div class="scroll-hint rv" aria-hidden="true"><span></span>pastga</div>
   </section>
 
-  <div class="marquee" aria-hidden="true"><div>
-    <span>yes, yes, I love you</span><b>♥</b><span>yes, yes, I love you</span><b>♥</b><span>yes, yes, I love you</span><b>♥</b><span>yes, yes, I love you</span><b>♥</b>
-    <span>yes, yes, I love you</span><b>♥</b><span>yes, yes, I love you</span><b>♥</b><span>yes, yes, I love you</span><b>♥</b><span>yes, yes, I love you</span><b>♥</b>
-  </div></div>
-
   <!-- ───────── 01 ───────── -->
-  <section class="page sec p-polaroid">
+  <section class="scene page p-polaroid" data-dur="5600" data-bg="1">
     <div class="shot">
       <figure class="polaroid tilt">
         <i class="tape"></i>
-        <div class="ph sq"><img src="assets/img/1.jpg" alt="" loading="lazy" width="900" height="900"></div>
+        <div class="ph sq"><img src="assets/img/1.jpg" alt="" width="900" height="900"></div>
         <figcaption>shirin ♥</figcaption>
       </figure>
       <span class="kiss k1">🤍</span><span class="kiss k2">🤍</span><span class="kiss k3">🤍</span>
@@ -80,10 +83,10 @@
   </section>
 
   <!-- ───────── 02 ───────── -->
-  <section class="page sec p-film flip">
+  <section class="scene page p-film flip" data-dur="5600" data-bg="3">
     <div class="shot">
       <figure class="film tilt">
-        <div class="ph"><img src="assets/img/3.jpg" alt="" loading="lazy" width="720" height="1280"></div>
+        <div class="ph"><img src="assets/img/3.jpg" alt="" width="720" height="1280"></div>
         <figcaption>kadr 02 · sen</figcaption>
       </figure>
     </div>
@@ -94,16 +97,11 @@
     </div>
   </section>
 
-  <div class="marquee rev" aria-hidden="true"><div>
-    <span>doim kulib yur</span><b>♥</b><span>yes, yes</span><b>♥</b><span>doim kulib yur</span><b>♥</b><span>yes, yes</span><b>♥</b><span>doim kulib yur</span><b>♥</b><span>yes, yes</span><b>♥</b>
-    <span>doim kulib yur</span><b>♥</b><span>yes, yes</span><b>♥</b><span>doim kulib yur</span><b>♥</b><span>yes, yes</span><b>♥</b><span>doim kulib yur</span><b>♥</b><span>yes, yes</span><b>♥</b>
-  </div></div>
-
   <!-- ───────── 03 ───────── -->
-  <section class="page sec p-arch">
+  <section class="scene page p-arch" data-dur="5600" data-bg="4">
     <div class="shot">
       <figure class="arch tilt">
-        <div class="ph"><img src="assets/img/4.jpg" alt="" loading="lazy" width="900" height="1255"></div>
+        <div class="ph"><img src="assets/img/4.jpg" alt="" width="900" height="1255"></div>
       </figure>
       <span class="spark s1">✦</span><span class="spark s2">✦</span><span class="spark s3">✦</span>
     </div>
@@ -115,11 +113,11 @@
   </section>
 
   <!-- ───────── 04 ───────── -->
-  <section class="page sec p-bloom flip">
+  <section class="scene page p-bloom flip" data-dur="5600" data-bg="5">
     <div class="petals" aria-hidden="true"></div>
     <div class="shot">
       <figure class="bloom tilt">
-        <div class="ph"><img src="assets/img/5.jpg" alt="" loading="lazy" width="960" height="1280"></div>
+        <div class="ph"><img src="assets/img/5.jpg" alt="" width="960" height="1280"></div>
       </figure>
     </div>
     <div class="txt">
@@ -130,7 +128,7 @@
   </section>
 
   <!-- ───────── Maktub ───────── -->
-  <section class="letter sec">
+  <section class="scene letter" data-dur="7600" data-bg="">
     <article class="paper">
       <i class="seal" aria-hidden="true">♥</i>
       <h3 class="rv">Senga,</h3>
@@ -142,15 +140,17 @@
   </section>
 
   <!-- ───────── Final ───────── -->
-  <section class="finale sec" id="finale">
-    <div class="answer" aria-live="polite">
-      <div class="thumbs">
-        <img src="assets/img/1.jpg" alt=""><img src="assets/img/3.jpg" alt=""><img src="assets/img/2.jpg" alt=""><img src="assets/img/4.jpg" alt=""><img src="assets/img/5.jpg" alt="">
-      </div>
-      <h2 class="ily"><span>Doim</span> <span>kulib</span> <span>yur</span></h2>
-      <p class="body">Bu albom — shunchaki senga.<br>Qolganini qo‘shiq aytadi ♥</p>
-      <button class="again" type="button">yuraklar ♥</button>
+  <section class="scene finale" id="finale" data-dur="16000" data-bg="">
+    <div class="collage">
+      <figure class="card c1"><div class="ph"><img src="assets/img/1.jpg" alt=""></div></figure>
+      <figure class="card c2"><div class="ph"><img src="assets/img/3.jpg" alt=""></div></figure>
+      <figure class="card c3"><div class="ph"><img src="assets/img/4.jpg" alt=""></div></figure>
+      <figure class="card c4"><div class="ph"><img src="assets/img/5.jpg" alt=""></div></figure>
+      <figure class="card c5"><div class="ph"><img src="assets/img/2.jpg" alt=""></div></figure>
     </div>
+    <h2 class="ily"><span>Doim</span> <span>kulib</span> <span>yur</span></h2>
+    <p class="body">Bu albom — shunchaki senga.<br>Qolganini qo‘shiq aytadi ♥</p>
+    <button class="again" type="button">boshidan ↻</button>
   </section>
 
 </main>
